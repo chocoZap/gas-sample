@@ -1,0 +1,17 @@
+{
+  "name": "gas-sample",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "push": "clasp push -f",
+    "open": "clasp open-script",
+    "open:web": "clasp open-web-app",
+    "open:container": "clasp open-container",
+    "version": "clasp version",
+    "deploy": "clasp deploy"
+  },
+  "devDependencies": {
+    "@google/clasp": "^3.0.6-alpha"
+  }
+}

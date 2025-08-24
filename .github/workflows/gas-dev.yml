@@ -1,0 +1,40 @@
+name: GAS Dev Push
+
+on:
+  push:
+    branches: [ "main" ]
+    # 変更ファイルを限定したければ paths を有効化:
+    # paths:
+    #   - "src/**"
+    #   - ".clasp.json"
+    #   - "package.json"
+    #   - "yarn.lock"
+
+jobs:
+  push-dev:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          yarn --version
+          yarn install --frozen-lockfile || yarn install --immutable
+
+      # Secrets から ~/.clasprc.json を復元（clasp v3 用）
+      - name: Restore clasp token
+        run: |
+          mkdir -p $HOME
+          echo '${{ secrets.CLASP_TOKEN_JSON }}' > $HOME/.clasprc.json
+          chmod 600 $HOME/.clasprc.json
+
+      - name: Push to Apps Script
+        run: yarn push
