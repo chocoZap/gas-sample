@@ -29,12 +29,5 @@ jobs:
           yarn --version
           yarn install --frozen-lockfile || yarn install --immutable
 
-      # Secrets から ~/.clasprc.json を復元（clasp v3 用）
-      - name: Restore clasp token
-        run: |
-          mkdir -p $HOME
-          echo ${{ secrets.CLASP_TOKEN_JSON }} > $HOME/.clasprc.json
-          chmod 600 $HOME/.clasprc.json
-
       - name: Push to Apps Script
         run: yarn push
