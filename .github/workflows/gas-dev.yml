@@ -1,11 +1,19 @@
 name: GAS Dev Push
+
 on:
   push:
     branches: [ "main" ]
+    # 変更ファイルを限定したければ paths を有効化:
+    # paths:
+    #   - "src/**"
+    #   - ".clasp.json"
+    #   - "package.json"
+    #   - "yarn.lock"
 
 jobs:
   push-dev:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
 
@@ -18,22 +26,15 @@ jobs:
 
       - name: Install deps
         run: |
+          yarn --version
           yarn install --frozen-lockfile || yarn install --immutable
 
-      # ← ここが重要（Base64から ~/.clasprc.json を再現）
-      - name: Restore clasp token (base64)
-        env:
-          CLASP_TOKEN_B64: ${{ secrets.CLASP_TOKEN_B64 }}
+      # Secrets から ~/.clasprc.json を復元（clasp v3 用）
+      - name: Restore clasp token
         run: |
-          echo "HOME is: $HOME"
-          test -n "$CLASP_TOKEN_B64" || (echo "Secret CLASP_TOKEN_B64 is empty" && exit 1)
-          mkdir -p "$HOME"
-          echo "$CLASP_TOKEN_B64" | base64 -d > "$HOME/.clasprc.json"
-          chmod 600 "$HOME/.clasprc.json"
-          # 妥当性チェック（ここで失敗したらSecretが壊れてます）
-          jq -e . "$HOME/.clasprc.json" >/dev/null
-          echo "clasprc size: $(wc -c < "$HOME/.clasprc.json") bytes"
-          ls -la "$HOME/.clasprc.json"
+          mkdir -p $HOME
+          echo '${{ secrets.CLASP_TOKEN_JSON }}' > $HOME/.clasprc.json
+          chmod 600 $HOME/.clasprc.json
 
       - name: Push to Apps Script
         run: yarn push
