@@ -33,8 +33,8 @@ jobs:
       - name: Restore clasp token
         run: |
           mkdir -p $HOME
-          echo '${{ secrets.CLASP_TOKEN_JSON }}' > $HOME/.clasp.json
-          chmod 600 $HOME/.clasp.json
+          echo '${{ secrets.CLASP_TOKEN_JSON }}' > $HOME/.clasprc.json
+          chmod 600 $HOME/.clasprc.json
 
       - name: Push to Apps Script
         run: yarn push
