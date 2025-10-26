@@ -1,5 +1,5 @@
 function doGet() {
-  return ContentService.createTextOutput("こんにちは");
+  return ContentService.createTextOutput("これはテストです");
 }
 
 function hello() {
