@@ -1,5 +1,5 @@
 function doGet() {
-  return ContentService.createTextOutput("これはテストです");
+  return ContentService.createTextOutput("これはgithub actionsからpushされたテストです");
 }
 
 function hello() {
